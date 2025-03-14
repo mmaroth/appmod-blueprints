@@ -13,8 +13,6 @@ spec:
       value: ${{values.namespace}}
     - name: aws_region
       value: ${{values.aws_region}}
-    - name: gitea_token
-      value: ${{values.gitea_token}}
     - name: hostname
       value: ${{values.hostname}}
 
@@ -35,10 +33,6 @@ spec:
         
         - name: create-gitea-token-secret
           template: create-gitea-token-secret
-          arguments:
-            parameters:
-            - name: token
-              value: "{{workflow.parameters.gitea_token}}"
 
         - name: create-ecr-repository
           template: create-ecr-repository
@@ -80,16 +74,14 @@ spec:
           --docker-password="{{inputs.parameters.ecr_secret}}"
 
   - name: create-gitea-token-secret
-    inputs:
-      parameters:
-      - name: token
     container:
       image: bitnami/kubectl:latest
       command: ["/bin/bash", "-c"]
       args:
       - |
+        gitea_token=$(kubectl get secret gitea-credential -n gitea -o jsonpath='{.data.token}' | base64 --decode)
         kubectl delete secret "{{workflow.parameters.appname}}"-gitea-token --ignore-not-found
-        kubectl create secret generic "{{workflow.parameters.appname}}"-gitea-token -n "{{workflow.parameters.namespace}}" --from-literal=token="{{inputs.parameters.token}}"
+        kubectl create secret generic "{{workflow.parameters.appname}}"-gitea-token -n "{{workflow.parameters.namespace}}" --from-literal=token="$gitea_token"
 
   - name: create-ecr-repository
     container:
