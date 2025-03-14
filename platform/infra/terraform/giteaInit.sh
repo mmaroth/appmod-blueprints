@@ -22,7 +22,7 @@ export ENCODED_USER_PASS=$(echo "$USER_PASS" | tr -d \\n | base64)
 
 # Create gitea Auth Token and adding it to gitea-credentials
 TOKEN=$(curl -k -X POST -H "Content-Type: application/json" -d '{"name":"token01", "scopes": ["write:repository"]}' -u $USERNAME:$PASSWORD https://$DOMAIN_NAME/gitea/api/v1/users/$USERNAME/tokens | jq -r .sha1 |base64)
-kubectl patch secret gitea-credential -p '{"data": {"token": "$TOKEN"}}' -n gitea
+kubectl patch secret gitea-credential -p '{"data": {"token": "'"$TOKEN"'"}}' -n gitea
 
 
 curl -k -X POST "https://$DOMAIN_NAME/gitea/api/v1/admin/users/$USERNAME/repos" -H "content-type: application/json" -H "Authorization: Basic $ENCODED_USER_PASS" --data '{"name":"dotnet"}'
