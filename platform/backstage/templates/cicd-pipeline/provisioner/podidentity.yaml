@@ -23,6 +23,32 @@ roleRef:
   name: cluster-admin
   apiGroup: rbac.authorization.k8s.io
 ---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: secret-reader
+  namespace: gitea
+rules:
+- apiGroups: [""]
+  resources: ["secrets"]
+  resourceNames: ["gitea-credential"]  # Specify the exact secret name for better security
+  verbs: ["get"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: ${{values.appname}}-cicd-provisioner-binding
+  namespace: gitea
+subjects:
+- kind: ServiceAccount
+  name: ${{values.appname}}-cicd-provisioner
+  namespace: ${{values.namespace}}
+roleRef:
+  kind: Role
+  name: secret-reader
+  apiGroup: rbac.authorization.k8s.io
+---
+
 # PodIdentityAssociation
 apiVersion: eks.aws.upbound.io/v1beta1
 kind: PodIdentityAssociation
