@@ -42,7 +42,7 @@ spec:
           appname: ${{ parameters.appname }}
           namespace: team-${{ parameters.appname }}
           aws_region: ${{ parameters.aws_region }}
-          hostname: ${{parameters.hostname}}
+          hostname: ${{ baseUrl }}
           dockerfile_path: ${{parameters.dockerfile_path}}
           deployment_path: ${{parameters.deployment_path}}
 
