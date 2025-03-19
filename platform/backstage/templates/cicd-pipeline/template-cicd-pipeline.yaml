@@ -27,7 +27,7 @@ spec:
         hostname:
           title: DNS of management cluster. Example - modern-engg-XXXXXXXXXX.elb.us-west-2.amazonaws.com
           type: string
-          default: ${{ baseUrl }}
+          default: ${{ context.baseUrl }}
       title: Configuration Options
       required:
         - appname
@@ -42,7 +42,7 @@ spec:
           appname: ${{ parameters.appname }}
           namespace: team-${{ parameters.appname }}
           aws_region: ${{ parameters.aws_region }}
-          hostname: ${{ baseUrl }}
+          hostname: $${{ parameters.hostname }}
           dockerfile_path: ${{parameters.dockerfile_path}}
           deployment_path: ${{parameters.deployment_path}}
 
