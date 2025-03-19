@@ -28,7 +28,7 @@ spec:
       required:
         - appname
   steps:
-     - id: fetchSystem
+    - id: fetchSystem
       name: Fetch System
       action: catalog:fetch
       input:
@@ -121,6 +121,3 @@ spec:
         entityRef: ${{ steps['register'].output.entityRef }}
       - title: Open in argo workflows
         url: https://${{ steps['fetchSystem'].output.entity.spec.hostname }}/argo-workflows/workflows/team-${{ parameters.appname }}
-
-
-
