@@ -27,6 +27,7 @@ spec:
         hostname:
           title: DNS of management cluster. Example - modern-engg-XXXXXXXXXX.elb.us-west-2.amazonaws.com
           type: string
+          default: ${{ baseUrl }}
       title: Configuration Options
       required:
         - appname
