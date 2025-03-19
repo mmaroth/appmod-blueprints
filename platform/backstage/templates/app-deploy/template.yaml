@@ -15,8 +15,6 @@ spec:
     - title: Provide App Information
       required:
         - appName
-        - environment
-        - repoName
       properties:
         appName:
           title: App Name
@@ -41,46 +39,8 @@ spec:
           default: default
     - title: Provide Gitea Instance Information
   steps:
-    - id: fetch-base
-      name: Fetch Skeleton + Template
-      action: fetch:template
-      input:
-        url: ./skeleton
-        values:
-          appName: ${{ parameters.appName }}
-          environment: ${{ parameters.environment }}
-    - id: publish
-      name: Publishing to a gitea git repository
-      action: publish:gitea
-      input:
-        description: App with ${{parameters.appName}} for ${{parameters.environment}}
-        repoUrl: ${{parameters.repoUrl}}?repo=${{parameters.repoName}}
-        defaultBranch: main
-    - id: create-argocd-app
-      name: Create ArgoCD App
-      action: cnoe:create-argocd-app
-      input:
-        appName: ${{parameters.appName}}
-        appNamespace: ${{parameters.appNamespace}}
-        argoInstance: ${{parameters.environment}}
-        projectName: default
-        repoUrl: http://my-gitea-http.gitea.svc.cluster.local:3000/giteaAdmin/${{parameters.repoName}}
-        path: "manifests"
-    - id: register
-      name: Register
-      action: catalog:register
-      input:
-        repoContentsUrl: ${{ steps['publish'].output.repoContentsUrl }}
-        catalogInfoPath: 'catalog-info.yaml'
-    - id: template-output
-      name: Template Output
+    - id: fetch-info
+      name: Fetch Info
       action: debug:log
       input:
-        listWorkspace: true
-  output:
-    links:
-      - title: Repository
-        url: ${{ steps.publish.output.remoteUrl }}
-      - title: Open in catalog
-        icon: catalog
-        entityRef: ${{ steps.register.output.entityRef }}
+        message: 'Backstage is hosted at: \${{ parameters.baseUrl }}'
