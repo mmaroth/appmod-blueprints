@@ -43,4 +43,4 @@ spec:
       name: Fetch Info
       action: debug:log
       input:
-        message: 'Backstage is hosted at: \${{ parameters.hostname }}'
+        message: 'Backstage is host: \${{ parameters.hostname }}'
