@@ -40,8 +40,6 @@ template: {
                 value: "\(context.name)"
               },
             ]
-            providerConfigName: "default"
-            region: "us-west-2"
         }
         databaseName: "initdb"
         deploy: "\(parameter.deploy)"
